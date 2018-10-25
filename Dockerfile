@@ -9,7 +9,9 @@ ENV LANG=C.UTF-8
 
 RUN echo "@edge http://nl.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories ; \
     apk --no-cache --update --virtual .deps add curl && \
-    apk --no-cache --update add tini logrotate
+    apk --no-cache --update add tini logrotate && \
+    sed -i 's/\(\/var\/log\/messages \){}/\1{\n  missingok \n}/' /etc/logrotate.conf
 
-ENTRYPOINT [ "/sbin/tini", "--" ]
-CMD /entrypoint.sh
+COPY entrypoint.sh /
+ENTRYPOINT [ "/sbin/tini", "--", "/entrypoint.sh" ]
+CMD [ "traefik" ]
