@@ -12,4 +12,8 @@ if traefik "$1" --help | grep -s -q "help"; then
     set -- traefik "$@"
 fi
 
+# start cron deaemon
+/usr/sbin/crond -L /dev/null
+
+# start traefik
 exec "$@"
