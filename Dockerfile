@@ -11,5 +11,6 @@ RUN echo "@edge http://nl.alpinelinux.org/alpine/edge/main" >> /etc/apk/reposito
     apk --no-cache --update --virtual .deps add curl && \
     apk --no-cache --update add tini logrotate
 
-ENTRYPOINT [ "/sbin/tini", "--" ]
-CMD /entrypoint.sh
+COPY entrypoint.sh /
+ENTRYPOINT [ "/sbin/tini", "--", "/entrypoint.sh" ]
+CMD [ "traefik" ]
